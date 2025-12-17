@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>CHIRPS Swipe (Titiler + TileJSON)</title>
+
+  <link rel="stylesheet" href="ol/ol.css">
+  <script src="ol/ol.js"></script>
+
+  <link rel="stylesheet" href="ol-ext/ol-ext.css">
+  <script src="ol-ext/ol-ext.min.js"></script>
+
+  <style>
+    #map { width: 100%; height: 800px; }
+    #controls {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(255,255,255,0.9);
+      padding: 8px;
+      border-radius: 4px;
+      font-family: Arial, sans-serif;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+
+<div id="controls">
+  <label>Izquierda:
+    <select id="leftYear"></select>
+  </label>
+  <label>Derecha:
+    <select id="rightYear"></select>
+  </label>
+</div>
+
+<div id="map"></div>
+
+<script>
+var TITILER = "http://127.0.0.1:8000";
+
+var chirpsCOGs = {
+  2000: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" + encodeURIComponent("file:///data/CHIRPS_2000_cog.tif"),
+  2001: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" + encodeURIComponent("file:///data/CHIRPS_2001_cog.tif"),
+  2002: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" + encodeURIComponent("file:///data/CHIRPS_2002_cog.tif"),
+  2003: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" + encodeURIComponent("file:///data/CHIRPS_2003_cog.tif"),
+  2004: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" + encodeURIComponent("file:///data/CHIRPS_2004_cog.tif"),
+  2005: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" + encodeURIComponent("file:///data/CHIRPS_2005_cog.tif"),
+  2006: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" + encodeURIComponent("file:///data/CHIRPS_2006_cog.tif"),
+  2007: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" + encodeURIComponent("file:///data/CHIRPS_2007_cog.tif"),
+  2008: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" + encodeURIComponent("file:///data/CHIRPS_2008_cog.tif"),
+  2009: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" + encodeURIComponent("file:///data/CHIRPS_2009_cog.tif"),
+  2010: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" + encodeURIComponent("file:///data/CHIRPS_2010_cog.tif"),
+  2011: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" + encodeURIComponent("file:///data/CHIRPS_2011_cog.tif"),
+  2012: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" + encodeURIComponent("file:///data/CHIRPS_2012_cog.tif"),
+  2013: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" + encodeURIComponent("file:///data/CHIRPS_2013_cog.tif"),
+  2014: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" + encodeURIComponent("file:///data/CHIRPS_2014_cog.tif"),
+  2015: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" + encodeURIComponent("file:///data/CHIRPS_2015_cog.tif"),
+  2016: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" + encodeURIComponent("file:///data/CHIRPS_2016_cog.tif"),
+  2017: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" + encodeURIComponent("file:///data/CHIRPS_2017_cog.tif"),
+  2018: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" + encodeURIComponent("file:///data/CHIRPS_2018_cog.tif"),
+  2019: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" + encodeURIComponent("file:///data/CHIRPS_2019_cog.tif"),
+  2020: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" + encodeURIComponent("file:///data/CHIRPS_2020_cog.tif"),
+  2021: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" + encodeURIComponent("file:///data/CHIRPS_2021_cog.tif"),
+  2022: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" + encodeURIComponent("file:///data/CHIRPS_2022_cog.tif"),
+  2023: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" + encodeURIComponent("file:///data/CHIRPS_2023_cog.tif"),
+  2024: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" + encodeURIComponent("file:///data/CHIRPS_2024_cog.tif")
+};
+
+var leftSel = document.getElementById("leftYear");
+var rightSel = document.getElementById("rightYear");
+
+Object.keys(chirpsCOGs).forEach(y => {
+  leftSel.add(new Option(y, y));
+  rightSel.add(new Option(y, y));
+});
+
+leftSel.value = 2000;
+rightSel.value = 2024;
+
+var leftLayer = new ol.layer.Tile();
+var rightLayer = new ol.layer.Tile();
+
+function updateTileJSON() {
+  leftLayer.setSource(new ol.source.TileJSON({
+    url: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" +
+         encodeURIComponent(chirpsCOGs[leftSel.value]),
+    crossOrigin: "anonymous"
+  }));
+
+  rightLayer.setSource(new ol.source.TileJSON({
+    url: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" +
+         encodeURIComponent(chirpsCOGs[rightSel.value]),
+    crossOrigin: "anonymous"
+  }));
+}
+updateTileJSON();
+
+var map = new ol.Map({
+  target: "map",
+  layers: [
+    new ol.layer.Tile({ source: new ol.source.OSM() }),
+    leftLayer,
+    rightLayer
+  ],
+  view: new ol.View({
+    center: ol.proj.fromLonLat([-77.68, -0.20]),
+    zoom: 3,
+    maxZoom: 8
+  })
+});
+
+var swipe = new ol.control.Swipe({
+  layers: [leftLayer],
+  rightLayers: [rightLayer]
+});
+map.addControl(swipe);
+
+leftSel.onchange = updateTileJSON;
+rightSel.onchange = updateTileJSON;
+</script>
+
+</body>
+</html>
