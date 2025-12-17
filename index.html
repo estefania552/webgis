@@ -41,44 +41,41 @@
 var TITILER = "http://127.0.0.1:8000";
 
 var chirpsCOGs = {
-  2000: "file:///data/CHIRPS_2000_cog.tif",
-  2001: "file:///data/CHIRPS_2001_cog.tif",
-  2002: "file:///data/CHIRPS_2002_cog.tif",
-  2003: "file:///data/CHIRPS_2003_cog.tif",
-  2004: "file:///data/CHIRPS_2004_cog.tif",
-  2005: "file:///data/CHIRPS_2005_cog.tif",
-  2006: "file:///data/CHIRPS_2006_cog.tif",
-  2007: "file:///data/CHIRPS_2007_cog.tif",
-  2008: "file:///data/CHIRPS_2008_cog.tif",
-  2009: "file:///data/CHIRPS_2009_cog.tif",
-  2010: "file:///data/CHIRPS_2010_cog.tif",
-  2011: "file:///data/CHIRPS_2011_cog.tif",
-  2012: "file:///data/CHIRPS_2012_cog.tif",
-  2013: "file:///data/CHIRPS_2013_cog.tif",
-  2014: "file:///data/CHIRPS_2014_cog.tif",
-  2015: "file:///data/CHIRPS_2015_cog.tif",
-  2016: "file:///data/CHIRPS_2016_cog.tif",
-  2017: "file:///data/CHIRPS_2017_cog.tif",
-  2018: "file:///data/CHIRPS_2018_cog.tif",
-  2019: "file:///data/CHIRPS_2019_cog.tif",
-  2020: "file:///data/CHIRPS_2020_cog.tif",
-  2021: "file:///data/CHIRPS_2021_cog.tif",
-  2022: "file:///data/CHIRPS_2022_cog.tif",
-  2023: "file:///data/CHIRPS_2023_cog.tif",
-  2024: "file:///data/CHIRPS_2024_cog.tif"
+  2000: "/data/CHIRPS_2000_cog.tif",
+  2001: "/data/CHIRPS_2001_cog.tif",
+  2002: "/data/CHIRPS_2002_cog.tif",
+  2003: "/data/CHIRPS_2003_cog.tif",
+  2004: "/data/CHIRPS_2004_cog.tif",
+  2005: "/data/CHIRPS_2005_cog.tif",
+  2006: "/data/CHIRPS_2006_cog.tif",
+  2007: "/data/CHIRPS_2007_cog.tif",
+  2008: "/data/CHIRPS_2008_cog.tif",
+  2009: "/data/CHIRPS_2009_cog.tif",
+  2010: "/data/CHIRPS_2010_cog.tif",
+  2011: "/data/CHIRPS_2011_cog.tif",
+  2012: "/data/CHIRPS_2012_cog.tif",
+  2013: "/data/CHIRPS_2013_cog.tif",
+  2014: "/data/CHIRPS_2014_cog.tif",
+  2015: "/data/CHIRPS_2015_cog.tif",
+  2016: "/data/CHIRPS_2016_cog.tif",
+  2017: "/data/CHIRPS_2017_cog.tif",
+  2018: "/data/CHIRPS_2018_cog.tif",
+  2019: "/data/CHIRPS_2019_cog.tif",
+  2020: "/data/CHIRPS_2020_cog.tif",
+  2021: "/data/CHIRPS_2021_cog.tif",
+  2021: "/data/CHIRPS_2021_cog.tif",
+  2022: "/data/CHIRPS_2022_cog.tif",
+  2023: "/data/CHIRPS_2023_cog.tif",
+  2024: "/data/CHIRPS_2024_cog.tif"
 };
 
 var TITILER = "http://127.0.0.1:8000";
 
-function makeTileJSONSource(cogUrl) {
-  return new ol.source.TileJSON({
-    url:
-      TITILER +
-      "/cog/WebMercatorQuad/tilejson.json?url=" +
-      encodeURIComponent(cogUrl),
-    crossOrigin: "anonymous"
-  });
-}
+leftLayer.setSource(new ol.source.TileJSON({
+  url: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" + encodeURIComponent(chirpsCOGs[leftSel.value]),
+  crossOrigin: "anonymous"
+}));
+
 
 var leftSel = document.getElementById("leftYear");
 var rightSel = document.getElementById("rightYear");
