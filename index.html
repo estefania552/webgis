@@ -110,6 +110,8 @@ function updateTileJSON() {
 }
 updateTileJSON();
 
+var extent = [-78.05, -1.05, -75.50, 0.20];
+
 var map = new ol.Map({
   target: "map",
   layers: [
@@ -118,10 +120,14 @@ var map = new ol.Map({
     rightLayer
   ],
   view: new ol.View({
-    center: ol.proj.fromLonLat([-77.68, -0.20]),
-    zoom: 3
+    center: ol.proj.fromLonLat([-76.775, -0.425]),
+    zoom: 8,
+	minZoom: 6,
+    maxZoom: 12
   })
 });
+
+map.getView().fit(ol.proj.transformExtent(extent, 'EPSG:4326', 'EPSG:3857'));
 
 var swipe = new ol.control.Swipe({
   layers: [leftLayer],
