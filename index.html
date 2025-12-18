@@ -76,7 +76,8 @@ function makeTileJSONSource(cogUrl) {
     url:
       TITILER +
       "/cog/WebMercatorQuad/tilejson.json?url=" +
-      encodeURIComponent(cogUrl),
+      encodeURIComponent(cogUrl) +
+	  "&colormap_name=viridis",
     crossOrigin: "anonymous"
   });
 }
