@@ -76,8 +76,7 @@ function makeTileJSONSource(cogUrl) {
     url:
       TITILER +
       "/cog/WebMercatorQuad/tilejson.json?url=" +
-      encodeURIComponent(cogUrl) +
-	  "&colormap_name=viridis",
+      encodeURIComponent(cogUrl),
     crossOrigin: "anonymous"
   });
 }
@@ -99,7 +98,8 @@ var rightLayer = new ol.layer.Tile();
 function updateTileJSON() {
   leftLayer.setSource(new ol.source.TileJSON({
     url: TITILER + "/cog/WebMercatorQuad/tilejson.json?url=" +
-         encodeURIComponent(chirpsCOGs[leftSel.value]),
+         encodeURIComponent(chirpsCOGs[leftSel.value])+
+		 "&colormap_name=viridis",
     crossOrigin: "anonymous"
   }));
 
